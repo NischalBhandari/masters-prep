@@ -32,6 +32,11 @@ class Question
      */
     private $questionGroup;
 
+    /**
+     * @ORM\OneToOne(targetEntity="answer", inversedBy="question")
+     */
+    private $answer;
+
     public function getId(): ?int
     {
         return $this->id;
