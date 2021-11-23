@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AnswerRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Question;
@@ -20,9 +21,14 @@ class Answer
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Question", mappedBy="answer")
+     * @ORM\OneToOne(targetEntity="Question", inversedBy="answer")
      */
     private $question;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $multipleChoice;
 
     /**
      * @ORM\OneToMany(targetEntity="Option", mappedBy="answer")
@@ -64,6 +70,30 @@ class Answer
             $this->options[] = $option;
             $option->setAnswer($this);
         }
+        return $this;
+    }
+
+    public function isMultipleChoice(): ?bool
+    {
+        return $this->multipleChoice;
+    }
+
+    public function setMultipleChoice(bool $multipleChoice): self
+    {
+        $this->multipleChoice = $multipleChoice;
+
+        return $this;
+    }
+
+    public function removeOption(Option $option): self
+    {
+        if ($this->options->removeElement($option)) {
+            // set the owning side to null (unless already changed)
+            if ($option->getAnswer() === $this) {
+                $option->setAnswer(null);
+            }
+        }
+
         return $this;
     }
 }

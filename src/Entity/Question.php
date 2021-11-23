@@ -33,7 +33,7 @@ class Question
     private $questionGroup;
 
     /**
-     * @ORM\OneToOne(targetEntity="answer", inversedBy="question")
+     * @ORM\OneToOne(targetEntity="answer", mappedBy="question")
      */
     private $answer;
 
